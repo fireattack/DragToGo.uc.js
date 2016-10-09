@@ -115,8 +115,7 @@ if(location == "chrome://browser/content/browser.xul"){
 								);
 							return;
 						}
-						if (direction == "D") {
-							
+						if (direction == "D") {					
 							
 							//保存图片到Q:\\Down
 							// var aSrc = event.dataTransfer.getData("application/x-moz-file-promise-url");
@@ -159,7 +158,7 @@ if(location == "chrome://browser/content/browser.xul"){
 							return;
 						}
 						if (direction == "R") {
-							//前天打开图片链接
+							//前台打开图片链接
 							if (event.dataTransfer.types.contains("text/x-moz-url")){
 								gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0]，
 								{referrerURI: aReferrerURI, inBackground: false});
