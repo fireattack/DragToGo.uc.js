@@ -1,6 +1,6 @@
 // ==UserScript==
 // @id             DragToGo
-// @version        0.1
+// @version        2016-10-09
 // @namespace      DragToGo@ziyunfei
 // @author         ziyunfei
 // @modifier       Byzod / fireattack
@@ -119,27 +119,33 @@ if(location == "chrome://browser/content/browser.xul"){
 							
 							
 							//保存图片到Q:\\Down
-							var aSrc = event.dataTransfer.getData("application/x-moz-file-promise-url");
-							var fileName = aSrc.substr(aSrc.lastIndexOf('/') + 1);
-							var fileSaving = Components.classes["@mozilla.org/file/local;1"].
-									createInstance(Components.interfaces.nsILocalFile);
-							fileSaving.initWithPath("Q:\\Down");
-							fileSaving.append(fileName);
+							// var aSrc = event.dataTransfer.getData("application/x-moz-file-promise-url");
+							// var fileName = aSrc.substr(aSrc.lastIndexOf('/') + 1);
+							// var fileSaving = Components.classes["@mozilla.org/file/local;1"].
+									// createInstance(Components.interfaces.nsILocalFile);
+							// fileSaving.initWithPath("Q:\\Down");
+							// fileSaving.append(fileName);
 							
-							var options = {
-								source: aSrc,
-								target: fileSaving,
-							};
-							Cu.import("resource://gre/modules/Downloads.jsm");
-							var downloadPromise = Downloads.createDownload(options);
-							downloadPromise.then(function success(d) {
-								d.start();
-								Notification.requestPermission(()=>{
-									var n = new Notification(fileName + "已下载");
-									setTimeout(n.close.bind(n), 1500);
-								});
-							});							
-
+							// var options = {
+								// source: aSrc,
+								// target: fileSaving,
+							// };
+							// Cu.import("resource://gre/modules/Downloads.jsm");
+							// var downloadPromise = Downloads.createDownload(options);
+							// downloadPromise.then(function success(d) {
+								// d.start();
+								// Notification.requestPermission(()=>{
+									// var n = new Notification(fileName + "已下载");
+									// setTimeout(n.close.bind(n), 1500);
+								// });
+							// });
+							
+							//图像另存为
+							var aSrc = event.dataTransfer.getData("application/x-moz-file-promise-url");
+							var doc = event.target.ownerDocument;
+							saveImageURL(aSrc, null, "SaveImageTitle",
+                             false, false, doc.documentURIObject, doc);
+							return;
 						}
 						if (direction == "L") {
 							//前台打开图片
@@ -153,12 +159,10 @@ if(location == "chrome://browser/content/browser.xul"){
 							return;
 						}
 						if (direction == "R") {
-							//后台打开图片链接
+							//前天打开图片链接
 							if (event.dataTransfer.types.contains("text/x-moz-url")){
-								gBrowser.addTab(
-									event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
-									aReferrerURI
-								);
+								gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0]，
+								{referrerURI: aReferrerURI, inBackground: false});
 							}
 							return;
 						}
@@ -178,20 +182,16 @@ if(location == "chrome://browser/content/browser.xul"){
 							return;
 						}
 						if (direction == "L") {
-							//前台打开链接
-							gBrowser.selectedTab = 
-								gBrowser.addTab(
-									event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
-									aReferrerURI
-								);
+							//后台打开链接
+							gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
+							{referrerURI: aReferrerURI, inBackground: true});
 							return;
 						}
 						if (direction == "R") {
-							//后台打开链接
-							gBrowser.addTab(
-								event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
-								aReferrerURI
-							);
+							//前台打开链接
+							gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
+							{referrerURI: aReferrerURI, inBackground: false});
+							return;
 						}
 					} else {
 						var dragStr = event.dataTransfer.getData("text/unicode");
@@ -224,11 +224,13 @@ if(location == "chrome://browser/content/browser.xul"){
 							return;
 						}
 						if (direction == "R") {
-							//后台搜索文字, 若看起来像URL，尝试后台打开
+							//前台搜索文字, 若看起来像URL，尝试后台打开
 							if(self.seemAsURL(dragStr)){
-								gBrowser.addTab(dragStr,aReferrerURI);
+								gBrowser.loadOneTab(dragStr,
+								{referrerURI: aReferrerURI, inBackground: false});								
 							} else {
-								gBrowser.addTab(engine.getSubmission(dragStr, null).uri.spec, aReferrerURI);
+								gBrowser.loadOneTab(engine.getSubmission(dragStr, null).uri.spec,
+								{referrerURI: aReferrerURI, inBackground: false});	
 							}
 							return;
 						}
