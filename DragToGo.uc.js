@@ -115,8 +115,7 @@ if(location == "chrome://browser/content/browser.xul"){
 								);
 							return;
 						}
-						if (direction == "D") {					
-							
+						if (direction == "D") {							
 							//保存图片到Q:\\Down
 							// var aSrc = event.dataTransfer.getData("application/x-moz-file-promise-url");
 							// var fileName = aSrc.substr(aSrc.lastIndexOf('/') + 1);
@@ -148,19 +147,14 @@ if(location == "chrome://browser/content/browser.xul"){
 						}
 						if (direction == "L") {
 							//前台打开图片
-							gBrowser.selectedTab = 
-								gBrowser.addTab(
-									event.dataTransfer
-										.getData("application/x-moz-file-promise-url")
-										.split("\n")[0],
-									aReferrerURI
-								);
+							gBrowser.loadOneTab(event.dataTransfer.getData("application/x-moz-file-promise-url").split("\n")[0],
+							{referrerURI: aReferrerURI, inBackground: false});
 							return;
 						}
 						if (direction == "R") {
 							//前台打开图片链接
 							if (event.dataTransfer.types.contains("text/x-moz-url")){
-								gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0]，
+								gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
 								{referrerURI: aReferrerURI, inBackground: false});
 							}
 							return;
@@ -223,7 +217,7 @@ if(location == "chrome://browser/content/browser.xul"){
 							return;
 						}
 						if (direction == "R") {
-							//前台搜索文字, 若看起来像URL，尝试后台打开
+							//前台搜索文字, 若看起来像URL,尝试前台打开
 							if(self.seemAsURL(dragStr)){
 								gBrowser.loadOneTab(dragStr,
 								{referrerURI: aReferrerURI, inBackground: false});								
