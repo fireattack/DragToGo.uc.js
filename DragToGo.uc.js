@@ -1,6 +1,6 @@
 // ==UserScript==
 // @id             DragToGo
-// @version        2016-10-09
+// @version        2016-10-10
 // @namespace      DragToGo@ziyunfei
 // @author         ziyunfei
 // @modifier       Byzod / fireattack
