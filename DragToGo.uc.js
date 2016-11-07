@@ -143,13 +143,13 @@ if(location == "chrome://browser/content/browser.xul"){
                             var doc = event.target.ownerDocument;
                             saveImageURL(aSrc, null, "SaveImageTitle",
                              false, false, doc.documentURIObject, doc);
-                            return;
+                            //return;
                         }
                         if (direction == "L") {
                             //前台打开图片
                             gBrowser.loadOneTab(event.dataTransfer.getData("application/x-moz-file-promise-url").split("\n")[0],
                             {referrerURI: aReferrerURI, inBackground: false});
-                            return;
+                            //return;
                         }
                         if (direction == "R") {
                             //前台打开图片链接
@@ -157,13 +157,13 @@ if(location == "chrome://browser/content/browser.xul"){
                                 gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
                                 {referrerURI: aReferrerURI, inBackground: false});
                             }
-                            return;
+                            //return;
                         }
                     } else if (event.dataTransfer.types.contains("text/x-moz-url")) {
                         if (direction == "U") {
                             //在当前标签打开链接
                             loadURI(event.dataTransfer.getData("text/x-moz-url").split("\n")[0]);
-                            return;
+                            //return;
                         }
                         if (direction == "D") {
                             //链接另存为
@@ -172,19 +172,19 @@ if(location == "chrome://browser/content/browser.xul"){
                             saveURL(event.dataTransfer.getData("text/x-moz-url")
                                 .split("\n")[0], null, null, true, false, ref, doc
                             );
-                            return;
+                            //return;
                         }
                         if (direction == "L") {
                             //后台打开链接
                             gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
                             {referrerURI: aReferrerURI, inBackground: true});
-                            return;
+                            //return;
                         }
                         if (direction == "R") {
                             //前台打开链接
                             gBrowser.loadOneTab(event.dataTransfer.getData("text/x-moz-url").split("\n")[0],
                             {referrerURI: aReferrerURI, inBackground: false});
-                            return;
+                            //return;
                         }
                     } else {
                         var dragStr = event.dataTransfer.getData("text/unicode");
@@ -198,14 +198,14 @@ if(location == "chrome://browser/content/browser.xul"){
                             gFindBar.onFindCommand();
                             setTimeout(()=>{gFindBar.toggleHighlight(false)}, 10);
                             setTimeout(()=>{gFindBar.toggleHighlight(true)}, 20);
-                            return;
+                            //return;
                         }
                         if (direction == "D") {
                             //复制文字
                             Components.classes["@mozilla.org/widget/clipboardhelper;1"]
                                 .getService(Components.interfaces.nsIClipboardHelper)
                                 .copyString(dragStr);
-                            return;
+                            //return;
                         }
                         if (direction == "L") {
                             //站内前台搜索文字
@@ -214,7 +214,7 @@ if(location == "chrome://browser/content/browser.xul"){
                                     engine.getSubmission(searchStrInSite, null).uri.spec,
                                     aReferrerURI
                                 );
-                            return;
+                            //return;
                         }
                         if (direction == "R") {
                             //前台搜索文字, 若看起来像URL,尝试前台打开
@@ -225,10 +225,10 @@ if(location == "chrome://browser/content/browser.xul"){
                                 gBrowser.loadOneTab(engine.getSubmission(dragStr, null).uri.spec,
                                 {referrerURI: aReferrerURI, inBackground: false});  
                             }
-                            return;
+                            //return;
                         }
                     }
-                    self.startPoint = 0;
+                    self.startPoint = null;
                 }
             }
         }
